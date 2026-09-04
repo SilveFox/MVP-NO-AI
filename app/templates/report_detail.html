@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Отчёт {{ report.report_date.strftime('%d.%m.%Y') }} — {{ report.employee.full_name }}{% endblock %}
+{% block content %}
+{% set status_labels = {'draft': 'Черновик', 'submitted': 'На проверке', 'approved': 'Утверждён', 'rejected': 'Возвращён'} %}
+<div class="page-header">
+  <div>
+    <a href="/dispatcher" class="back-link">← К списку отчётов</a>
+    <h1>Отчёт за {{ report.report_date.strftime('%d.%m.%Y') }}</h1>
+    <p class="muted">
+      {{ report.employee.full_name }} · {{ report.employee.city }} ·
+      <span class="badge badge-{{ report.status.value }}">{{ status_labels.get(report.status.value, report.status.value) }}</span>
+    </p>
+  </div>
+  <div class="header-actions">
+    {% if report.status.value == 'submitted' %}
+    <form method="post" action="/dispatcher/{{ report.id }}/approve" style="display:inline">
+      <button class="btn btn-success">Утвердить</button>
+    </form>
+    <form method="post" action="/dispatcher/{{ report.id }}/reject" style="display:inline">
+      <button class="btn btn-danger">Вернуть на доработку</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+
+{% if report.comment %}
+<div class="card">
+  <strong>Комментарий:</strong> {{ report.comment }}
+</div>
+{% endif %}
+
+<div class="card">
+  <h2>Состав отчёта</h2>
+  {% if report.lines %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>№</th>
+        <th>Код</th>
+        <th>Наименование работы</th>
+        <th>Кол-во</th>
+        <th>Ед.</th>
+        <th>Цена</th>
+        <th>Сумма</th>
+        <th>Примечание</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for line in report.lines %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td><span class="code">{{ line.work_item.code }}</span></td>
+        <td>{{ line.work_item.name }}</td>
+        <td>{{ line.quantity }}</td>
+        <td>{{ line.work_item.unit }}</td>
+        <td>{{ "%.2f"|format(line.unit_price) }} ₽</td>
+        <td><strong>{{ "%.2f"|format(line.amount) }} ₽</strong></td>
+        <td>{{ line.note or "—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="6" class="text-right">Итого по отчёту</th>
+        <th colspan="2">{{ "%.2f"|format(report.total_amount) }} ₽</th>
+      </tr>
+    </tfoot>
+  </table>
+  {% else %}
+  <p class="muted">В отчёте нет строк.</p>
+  {% endif %}
+</div>
+
+<div class="card meta-card">
+  <h2>Служебная информация</h2>
+  <dl class="meta-list">
+    <dt>ID отчёта</dt><dd>{{ report.id }}</dd>
+    <dt>Сотрудник</dt><dd>{{ report.employee.full_name }}</dd>
+    <dt>Дата отчёта</dt><dd>{{ report.report_date.strftime('%d.%m.%Y') }}</dd>
+    <dt>Статус</dt><dd><span class="badge badge-{{ report.status.value }}">{{ status_labels.get(report.status.value, report.status.value) }}</span></dd>
+    <dt>Строк в отчёте</dt><dd>{{ report.lines|length }}</dd>
+    <dt>Создан</dt><dd>{{ report.created_at.strftime('%d.%m.%Y %H:%M') if report.created_at else '—' }}</dd>
+    <dt>Обновлён</dt><dd>{{ report.updated_at.strftime('%d.%m.%Y %H:%M') if report.updated_at else '—' }}</dd>
+  </dl>
+</div>
+{% endblock %}

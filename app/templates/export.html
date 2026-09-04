@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Экспорт{% endblock %}
+{% block content %}
+<h1>Экспорт отчётов</h1>
+<p class="muted">Выгрузка утверждённых и отправленных отчётов за период</p>
+
+<div class="card">
+  <form id="export-form" class="export-form">
+    <label>Период с</label>
+    <input type="date" id="from_date" name="from_date">
+    <label>по</label>
+    <input type="date" id="to_date" name="to_date">
+  </form>
+  <div class="export-buttons mt">
+    <a class="btn btn-primary" id="btn-xlsx" href="/api/export/xlsx">Скачать XLSX</a>
+    <a class="btn" id="btn-txt" href="/api/export/txt">Скачать TXT</a>
+    <a class="btn" id="btn-csv" href="/api/export/csv">Скачать CSV</a>
+  </div>
+</div>
+<script>
+function updateLinks() {
+  const from = document.getElementById('from_date').value;
+  const to = document.getElementById('to_date').value;
+  const q = new URLSearchParams();
+  if (from) q.set('from_date', from);
+  if (to) q.set('to_date', to);
+  const s = q.toString() ? '?' + q.toString() : '';
+  document.getElementById('btn-xlsx').href = '/api/export/xlsx' + s;
+  document.getElementById('btn-txt').href = '/api/export/txt' + s;
+  document.getElementById('btn-csv').href = '/api/export/csv' + s;
+}
+document.getElementById('from_date').addEventListener('change', updateLinks);
+document.getElementById('to_date').addEventListener('change', updateLinks);
+
+const today = new Date().toISOString().slice(0, 10);
+document.getElementById('to_date').value = today;
+updateLinks();
+</script>
+{% endblock %}

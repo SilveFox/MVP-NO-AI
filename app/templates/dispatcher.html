@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Диспетчер{% endblock %}
+{% block content %}
+{% set status_labels = {'draft': 'Черновик', 'submitted': 'На проверке', 'approved': 'Утверждён', 'rejected': 'Возвращён'} %}
+<h1>Панель диспетчера</h1>
+<p class="muted">Проверка и утверждение отчётов сотрудников</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Дата</th>
+      <th>ФИО</th>
+      <th>Статус</th>
+      <th>Строк</th>
+      <th>Сумма</th>
+      <th>Действия</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in reports %}
+    <tr>
+      <td>{{ r.report_date.strftime('%d.%m.%Y') }}</td>
+      <td>{{ r.employee.full_name }}</td>
+      <td><span class="badge badge-{{ r.status.value }}">{{ status_labels.get(r.status.value, r.status.value) }}</span></td>
+      <td>{{ r.lines|length }}</td>
+      <td>{{ "%.2f"|format(r.total_amount) }} ₽</td>
+      <td class="actions">
+        <a href="/dispatcher/report/{{ r.id }}" class="btn btn-sm btn-primary">Просмотр</a>
+        {% if r.status.value == 'submitted' %}
+        <form method="post" action="/dispatcher/{{ r.id }}/approve" style="display:inline">
+          <button class="btn btn-sm btn-success">Утвердить</button>
+        </form>
+        <form method="post" action="/dispatcher/{{ r.id }}/reject" style="display:inline">
+          <button class="btn btn-sm btn-danger">Вернуть</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="muted">Отчётов пока нет</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

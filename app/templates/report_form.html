@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Отчёт за {{ report_date.strftime('%d.%m.%Y') }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Отчёт за {{ report_date.strftime('%d.%m.%Y') }}</h1>
+  <form method="get" class="inline-form">
+    <input type="date" name="report_date" value="{{ report_date.isoformat() }}" onchange="this.form.submit()">
+  </form>
+</div>
+
+{% if report and report.status.value not in ['draft', 'rejected'] %}
+<div class="alert">Статус: <strong>{{ report.status.value }}</strong> — редактирование недоступно</div>
+{% endif %}
+
+<div class="grid-2">
+  <section class="card">
+    <h2>Добавить работу</h2>
+    {% if not report or report.status.value in ['draft', 'rejected'] %}
+    <form method="post" action="/report/line" id="add-form">
+      <input type="hidden" name="report_date" value="{{ report_date.isoformat() }}">
+      <input type="hidden" name="work_item_id" id="work_item_id" required>
+
+      <label>Категория</label>
+      <select id="category">
+        <option value="">Все категории</option>
+        {% for cat in categories %}
+        <option value="{{ cat }}">{{ cat }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Поиск работы</label>
+      <input type="text" id="work-search" placeholder="Часть слова: заяв, обжим, стояк…" autocomplete="off">
+      <div id="work-results" class="work-results"></div>
+
+      <div id="selected-work" class="selected-work hidden">
+        <strong id="selected-label"></strong>
+        <span id="selected-meta" class="muted"></span>
+      </div>
+
+      <label>Количество</label>
+      <input type="number" name="quantity" step="0.01" min="0.01" value="1" required>
+
+      <label>Примечание (необязательно)</label>
+      <input type="text" name="note" maxlength="300">
+
+      <button type="submit" class="btn btn-primary" id="btn-add" disabled>Добавить</button>
+    </form>
+    {% else %}
+    <p class="muted">Отчёт отправлен. Ожидайте проверки диспетчером.</p>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <h2>Строки отчёта</h2>
+    {% if report and report.lines %}
+    <table class="table">
+      <thead>
+        <tr><th>Работа</th><th>Кол-во</th><th>Сумма</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for line in report.lines %}
+        <tr>
+          <td>
+            <span class="code">{{ line.work_item.code }}</span>
+            {{ line.work_item.name }}
+            {% if line.note %}<br><small class="muted">{{ line.note }}</small>{% endif %}
+          </td>
+          <td>{{ line.quantity }} {{ line.work_item.unit }}</td>
+          <td>{{ "%.2f"|format(line.amount) }} ₽</td>
+          <td>
+            {% if report.status.value in ['draft', 'rejected'] %}
+            <form method="post" action="/report/line/{{ line.id }}/delete" style="display:inline">
+              <button type="submit" class="btn btn-sm btn-danger">✕</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr><th colspan="2">Итого</th><th colspan="2">{{ "%.2f"|format(report.total_amount) }} ₽</th></tr>
+      </tfoot>
+    </table>
+
+    {% if report.status.value in ['draft', 'rejected'] %}
+    <form method="post" action="/report/submit" class="mt">
+      <input type="hidden" name="report_date" value="{{ report_date.isoformat() }}">
+      <button type="submit" class="btn btn-success">Отправить отчёт</button>
+    </form>
+    {% endif %}
+    {% else %}
+    <p class="muted">Пока нет работ. Добавьте первую строку слева.</p>
+    {% endif %}
+  </section>
+</div>
+<script src="/static/js/report.js"></script>
+{% endblock %}

@@ -1,0 +1,17 @@
+[
+  {
+    "full_name": "Иванов И.И.",
+    "city": "Город",
+    "role": "master"
+  },
+  {
+    "full_name": "Петров П.П.",
+    "city": "Город",
+    "role": "master"
+  },
+  {
+    "full_name": "Селедкин С.С.",
+    "city": "Город",
+    "role": "master"
+  }
+]

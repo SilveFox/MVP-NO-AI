@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Вход — Отчёты SE{% endblock %}
+{% block content %}
+<div class="card login-card">
+  <h1>Вход в систему</h1>
+  <p class="muted">MVP — структурированный ввод отчётов без ИИ</p>
+  {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+  <form method="post" action="/login">
+    <label>ФИО</label>
+    <select name="full_name" required>
+      <option value="">— выберите —</option>
+      {% for e in employees %}
+      <option value="{{ e.full_name }}">{{ e.full_name }} ({{ e.role.value }})</option>
+      {% endfor %}
+    </select>
+    <label>PIN-код</label>
+    <input type="password" name="pin" placeholder="1234" required>
+    <p class="hint">Мастера: PIN <code>1234</code> · Диспетчер: <code>0000</code> · Админ: <code>admin</code></p>
+    <button type="submit" class="btn btn-primary">Войти</button>
+  </form>
+</div>
+{% endblock %}

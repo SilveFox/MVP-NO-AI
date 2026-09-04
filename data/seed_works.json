@@ -1,0 +1,122 @@
+[
+  {
+    "code": "1.1",
+    "name": "Заявка по неисправности интернета",
+    "unit": "шт.",
+    "tariff": 500,
+    "operation_price": 500,
+    "category": "Интернет"
+  },
+  {
+    "code": "1.2",
+    "name": "Обмер интернета",
+    "unit": "шт.",
+    "tariff": 300,
+    "operation_price": 300,
+    "category": "Интернет"
+  },
+  {
+    "code": "1.3",
+    "name": "Подключение абонента (интернет)",
+    "unit": "шт.",
+    "tariff": 600,
+    "operation_price": 600,
+    "category": "Интернет"
+  },
+  {
+    "code": "1.4",
+    "name": "Обжим коннектора RJ-45",
+    "unit": "шт.",
+    "tariff": 30,
+    "operation_price": 30,
+    "category": "Интернет"
+  },
+  {
+    "code": "1.5",
+    "name": "Настройка роутера",
+    "unit": "шт.",
+    "tariff": 500,
+    "operation_price": 500,
+    "category": "Интернет"
+  },
+  {
+    "code": "2.1",
+    "name": "Заявка по неисправности ТВ",
+    "unit": "шт.",
+    "tariff": 450,
+    "operation_price": 450,
+    "category": "Телевидение"
+  },
+  {
+    "code": "2.2",
+    "name": "Проверка сигнала и устранение неисправности",
+    "unit": "шт.",
+    "tariff": 400,
+    "operation_price": 400,
+    "category": "Телевидение"
+  },
+  {
+    "code": "2.3",
+    "name": "Настройка телевизора (150 каналов)",
+    "unit": "шт.",
+    "tariff": 350,
+    "operation_price": 350,
+    "category": "Телевидение"
+  },
+  {
+    "code": "2.4",
+    "name": "Монтаж телевизионного разъёма RG-6",
+    "unit": "шт.",
+    "tariff": 30,
+    "operation_price": 30,
+    "category": "Телевидение"
+  },
+  {
+    "code": "2.5",
+    "name": "Монтаж ответвителя",
+    "unit": "шт.",
+    "tariff": 80,
+    "operation_price": 80,
+    "category": "Телевидение"
+  },
+  {
+    "code": "3.1",
+    "name": "Прокладка кабеля в стояке",
+    "unit": "м",
+    "tariff": 90,
+    "operation_price": 90,
+    "category": "Монтаж"
+  },
+  {
+    "code": "3.2",
+    "name": "Прокладка кабеля по крыше с креплением",
+    "unit": "м",
+    "tariff": 120,
+    "operation_price": 120,
+    "category": "Монтаж"
+  },
+  {
+    "code": "3.3",
+    "name": "Сверление отверстия в бетоне до 24 мм, глубина до 500 мм",
+    "unit": "шт.",
+    "tariff": 150,
+    "operation_price": 150,
+    "category": "Монтаж"
+  },
+  {
+    "code": "3.4",
+    "name": "Выкладка запаса кабеля",
+    "unit": "1 запас",
+    "tariff": 220,
+    "operation_price": 220,
+    "category": "Монтаж"
+  },
+  {
+    "code": "3.5",
+    "name": "Сварка 1-7 волокон в муфте",
+    "unit": "волокно",
+    "tariff": 280,
+    "operation_price": 280,
+    "category": "Монтаж"
+  }
+]
